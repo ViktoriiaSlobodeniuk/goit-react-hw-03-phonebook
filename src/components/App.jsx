@@ -25,24 +25,35 @@ export class App extends Component {
       number: number,
     };
     this.setState(prevState => ({
-      ...prevState,
       contacts: [newContact, ...prevState.contacts],
     }));
   };
 
   onContactDelete = id => {
     this.setState(prevState => ({
-      ...prevState,
       contacts: prevState.contacts.filter(contact => contact.id !== id),
     }));
   };
 
   onFilter = text => {
-    this.setState(prevState => ({
-      ...prevState,
+    this.setState(() => ({
       filter: text,
     }));
   };
+
+  componentDidMount() {
+    const contacts = localStorage.getItem('Contacts');
+    const parseContacts = JSON.parse(contacts);
+
+    if (parseContacts) {
+      this.setState({ contacts: parseContacts });
+    }
+  }
+  componentDidUpdate(prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('Contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   render() {
     return (
