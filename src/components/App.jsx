@@ -4,6 +4,8 @@ import { ContactsForm } from './ContactsForm/ContactsForm';
 import { ContactsList } from './ContactsList';
 import { Filter } from './Filter/Filter';
 
+const initialContacts = [];
+
 export class App extends Component {
   state = {
     contacts: [],
@@ -43,11 +45,12 @@ export class App extends Component {
 
   componentDidMount() {
     const contacts = localStorage.getItem('Contacts');
-    const parseContacts = JSON.parse(contacts);
-
-    if (parseContacts) {
+    if (contacts !== null) {
+      const parseContacts = JSON.parse(contacts);
       this.setState({ contacts: parseContacts });
+      return;
     }
+    this.setState({ contacts: initialContacts });
   }
   componentDidUpdate(prevState) {
     if (this.state.contacts !== prevState.contacts) {
